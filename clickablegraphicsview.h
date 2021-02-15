@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QGraphicsPixmapItem>
 #include <iostream>
+#include <regionofinterest.h>
 
 class ClickableGraphicsView : public QGraphicsView
 {
@@ -24,11 +25,11 @@ private:
     bool isFirstPoint = true;
     QPointF lastPoint;
     QPointF firstPoint;
-    QList<QGraphicsItem *> itemList;
     QGraphicsItem *draggedItem;
-    double pointRadius = 5;
+    double pointRadius = 7;
     QGraphicsPixmapItem* imageItem;
     QPointF initialPoint;
+    RegionOfInterest roi;
 };
 
 #endif // CLICKABLEGRAPHICSVIEW_H

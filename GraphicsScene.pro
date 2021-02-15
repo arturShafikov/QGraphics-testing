@@ -18,11 +18,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     clickablegraphicsview.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    regionofinterest.cpp
 
 HEADERS += \
     clickablegraphicsview.h \
-    mainwindow.h
+    mainwindow.h \
+    regionofinterest.h
 
 FORMS += \
     mainwindow.ui
