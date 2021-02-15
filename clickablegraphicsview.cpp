@@ -11,28 +11,58 @@ ClickableGraphicsView::ClickableGraphicsView(QWidget *parent) :
 
 void ClickableGraphicsView::mousePressEvent(QMouseEvent *e)
 {
-    double radius = 2;
+    draggedItem = itemAt(e->pos());
     QPointF currentPoint = mapToScene(e->pos());
-    itemList << scene->addEllipse(currentPoint.x()-radius, currentPoint.y()-radius,
-                      radius*2.0, radius*2.0,
+    initialPoint = currentPoint;
+    if (draggedItem->type() != QGraphicsEllipseItem::Type) {
+        draggedItem = nullptr;
+        itemList << scene->addEllipse(currentPoint.x()-pointRadius,
+                                      currentPoint.y()-pointRadius,
+                      pointRadius*2.0, pointRadius*2.0,
                       QPen(), QBrush(Qt::SolidPattern));
-    if (!isFirstPoint) {
-        QLineF line(lastPoint.x(), lastPoint.y(),
-                    currentPoint.x(), currentPoint.y());
-        itemList << scene->addLine(line);
+        if (!isFirstPoint) {
+            QLineF line(lastPoint.x(), lastPoint.y(),
+                        currentPoint.x(), currentPoint.y());
+            itemList << scene->addLine(line);
+        }
+        if (isFirstPoint) {
+            firstPoint = currentPoint;
+            isFirstPoint = false;
+        }
+        lastPoint = currentPoint;
     }
-    if (isFirstPoint) {
-        firstPoint = currentPoint;
-        isFirstPoint = false;
+}
+
+void ClickableGraphicsView::mouseMoveEvent(QMouseEvent *event)
+{
+    if (draggedItem) {
+        QPointF currentPoint = mapToScene(event->pos());
+        draggedItem->moveBy(currentPoint.rx() - initialPoint.rx(),
+                            currentPoint.ry() - initialPoint.ry());
+        initialPoint = currentPoint;
     }
-    lastPoint = currentPoint;
+    QGraphicsView::mouseMoveEvent(event);
+}
+
+void ClickableGraphicsView::mouseReleaseEvent(QMouseEvent *event)
+{
+    QGraphicsItem *foundItem = itemAt(event->pos());
+    if (foundItem && draggedItem &&
+            foundItem != draggedItem) {
+        QPointF currentPoint = mapToScene(event->pos());
+        draggedItem->moveBy(currentPoint.rx() - initialPoint.rx(),
+                            currentPoint.ry() - initialPoint.ry());
+    }
+    draggedItem = nullptr;
+    initialPoint = QPointF(0,0);
+    QGraphicsView::mouseReleaseEvent(event);
 }
 
 void ClickableGraphicsView::setImage(QImage image)
 {
-    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
+    imageItem = new QGraphicsPixmapItem(QPixmap::fromImage(image));
     this->setFixedSize(image.width(), image.height());
-    scene->addItem(item);
+    scene->addItem(imageItem);
 }
 
 void ClickableGraphicsView::closePoints()
