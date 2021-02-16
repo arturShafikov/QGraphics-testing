@@ -23,6 +23,7 @@ public slots:
     void setImage(QImage image);
     void closePoints();
     void clearItems();
+    void cancel();
 private:
     QGraphicsScene *scene;
     bool isFirstPoint = true;
@@ -31,8 +32,9 @@ private:
     QGraphicsItem *draggedItem;
     double pointRadius = 7;
     QGraphicsPixmapItem* imageItem;
-    QPointF initialPoint;
+    QPointF initialDragPoint;
     RegionOfInterest roi;
+    bool isClosed = false;
 };
 
 #endif // CLICKABLEGRAPHICSVIEW_H

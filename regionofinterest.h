@@ -4,6 +4,7 @@
 #include <QGraphicsEllipseItem>
 #include <QGraphicsLineItem>
 #include <QGraphicsScene>
+#include <QPointF>
 #include <iostream>
 
 class RegionOfInterest
@@ -11,14 +12,18 @@ class RegionOfInterest
 public:
     RegionOfInterest();
 public slots:
-    void addPoint(QGraphicsItem* item);
+    void addPoint(QGraphicsItem* item, int x, int y);
     void addLine(QGraphicsLineItem *item);
     void changePointPosition(QGraphicsItem* item, qreal x, qreal y);
     void clearItems();
     QGraphicsItem* getFirstPoint();
     QGraphicsItem* getLastPoint();
+    QPointF getLastPointCoordinates();
+    void removeLastAddedElement();
+    void removeLastLine();
 private:
     QList<QGraphicsItem*> pointList;
+    QList<QPointF> pointCoordinatesList;
     QList<QGraphicsLineItem*> lineList;
 
 };

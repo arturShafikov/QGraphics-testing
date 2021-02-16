@@ -13,13 +13,14 @@ void ClickableGraphicsView::mousePressEvent(QMouseEvent *e)
 {
     draggedItem = itemAt(e->pos());
     QPointF currentPoint = mapToScene(e->pos());
-    initialPoint = currentPoint;
+    initialDragPoint = currentPoint;
     if (draggedItem->type() != QGraphicsEllipseItem::Type) {
         draggedItem = nullptr;
         roi.addPoint(scene->addEllipse(currentPoint.x()-pointRadius,
                                        currentPoint.y()-pointRadius,
                        pointRadius*2.0, pointRadius*2.0,
-                       QPen(), QBrush(Qt::SolidPattern)));
+                       QPen(), QBrush(Qt::SolidPattern)),
+                     currentPoint.x(), currentPoint.y());
         if (!isFirstPoint) {
             QLineF line(lastPoint.x(), lastPoint.y(),
                         currentPoint.x(), currentPoint.y());
@@ -38,12 +39,12 @@ void ClickableGraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
     if (draggedItem) {
         QPointF currentPoint = mapToScene(event->pos());
-        qreal difX = currentPoint.rx() - initialPoint.rx();
-        qreal difY = currentPoint.ry() - initialPoint.ry();
+        qreal difX = currentPoint.rx() - initialDragPoint.rx();
+        qreal difY = currentPoint.ry() - initialDragPoint.ry();
         roi.changePointPosition(draggedItem,
                                 difX,
                                 difY);
-        initialPoint = currentPoint;
+        initialDragPoint = currentPoint;
         if (draggedItem == roi.getLastPoint()) {
             lastPoint.setX(lastPoint.rx() + difX);
             lastPoint.setY(lastPoint.ry() + difY);
@@ -62,8 +63,8 @@ void ClickableGraphicsView::mouseReleaseEvent(QMouseEvent *event)
     if (foundItem && draggedItem &&
             foundItem != draggedItem) {
         QPointF currentPoint = mapToScene(event->pos());
-        qreal difX = currentPoint.rx() - initialPoint.rx();
-        qreal difY = currentPoint.ry() - initialPoint.ry();
+        qreal difX = currentPoint.rx() - initialDragPoint.rx();
+        qreal difY = currentPoint.ry() - initialDragPoint.ry();
         roi.changePointPosition(draggedItem,
                                 difX,
                                 difY);
@@ -77,7 +78,7 @@ void ClickableGraphicsView::mouseReleaseEvent(QMouseEvent *event)
         }
     }
     draggedItem = nullptr;
-    initialPoint = QPointF(0,0);
+    initialDragPoint = QPointF(0,0);
     QGraphicsView::mouseReleaseEvent(event);
 }
 
@@ -107,11 +108,27 @@ void ClickableGraphicsView::closePoints()
     QLineF line(lastPoint.x(), lastPoint.y(),
                 firstPoint.x(), firstPoint.y());
     roi.addLine(scene->addLine(line));
+    isClosed = true;
 }
 
 void ClickableGraphicsView::clearItems()
 {
     roi.clearItems();
     isFirstPoint = true;
+    isClosed = false;
+}
+
+void ClickableGraphicsView::cancel()
+{
+    if (isClosed) {
+        roi.removeLastLine();
+        isClosed = false;
+    } else {
+        roi.removeLastAddedElement();
+    }
+    if (roi.getFirstPoint() == nullptr) {
+        isFirstPoint = true;
+    }
+    lastPoint = roi.getLastPointCoordinates();
 }
 

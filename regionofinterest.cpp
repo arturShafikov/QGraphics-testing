@@ -5,9 +5,10 @@ RegionOfInterest::RegionOfInterest()
 
 }
 
-void RegionOfInterest::addPoint(QGraphicsItem *item)
+void RegionOfInterest::addPoint(QGraphicsItem *item, int x, int y)
 {
     pointList.push_back(item);
+    pointCoordinatesList.push_back(QPointF(x,y));
 }
 
 void RegionOfInterest::addLine(QGraphicsLineItem *item)
@@ -18,8 +19,10 @@ void RegionOfInterest::addLine(QGraphicsLineItem *item)
 void RegionOfInterest::changePointPosition(QGraphicsItem *item, qreal x, qreal y)
 {
     item->moveBy(x,y);
+    int pointPosition = pointList.indexOf(item);
+    pointCoordinatesList[pointPosition].rx() += x;
+    pointCoordinatesList[pointPosition].ry() += y;
     if (!lineList.isEmpty()) {
-        int pointPosition = pointList.indexOf(item);
         if ((pointPosition == 0) && (lineList.size() == pointList.size())) {
             lineList.back()->setLine(
                         lineList.back()->line().x1(),
@@ -49,6 +52,7 @@ void RegionOfInterest::clearItems()
         delete pointList.at(i);
     }
     pointList.clear();
+    pointCoordinatesList.clear();
 
     for (int i = 0; i < lineList.size(); i++) {
         delete lineList.at(i);
@@ -71,5 +75,32 @@ QGraphicsItem *RegionOfInterest::getLastPoint()
         return nullptr;
     } else {
         return pointList.back();
+    }
+}
+
+QPointF RegionOfInterest::getLastPointCoordinates()
+{
+    if (pointCoordinatesList.isEmpty()) {
+        return QPointF(0,0);
+    } else {
+        return pointCoordinatesList.back();
+    }
+}
+
+void RegionOfInterest::removeLastAddedElement()
+{
+    if (!pointList.isEmpty()) {
+        delete pointList.back();
+        pointList.removeLast();
+        pointCoordinatesList.removeLast();
+    }
+    removeLastLine();
+}
+
+void RegionOfInterest::removeLastLine()
+{
+    if (!lineList.isEmpty()) {
+        delete lineList.back();
+        lineList.removeLast();
     }
 }
