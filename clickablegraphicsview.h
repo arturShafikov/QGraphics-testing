@@ -5,6 +5,8 @@
 #include <QPointF>
 #include <QMouseEvent>
 #include <QGraphicsPixmapItem>
+#include <QtMath>
+#include <QScrollBar>
 #include <iostream>
 #include <regionofinterest.h>
 
@@ -17,6 +19,7 @@ public slots:
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void wheelEvent(QWheelEvent *event);
     void setImage(QImage image);
     void closePoints();
     void clearItems();

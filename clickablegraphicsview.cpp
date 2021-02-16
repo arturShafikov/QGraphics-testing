@@ -81,6 +81,20 @@ void ClickableGraphicsView::mouseReleaseEvent(QMouseEvent *event)
     QGraphicsView::mouseReleaseEvent(event);
 }
 
+void ClickableGraphicsView::wheelEvent(QWheelEvent *event)
+{
+    const QPointF scenePoint = mapToScene(QPoint(event->position().x(),
+                                                 event->position().y()));
+    qreal factor = qPow(1.2, event->angleDelta().y()/240.0);
+    scale(factor, factor);
+    const QPointF mousePoint = mapFromScene(scenePoint);
+    const QPointF movePoint = mousePoint - QPoint(event->position().x(),
+                                                  event->position().y());
+    horizontalScrollBar()->setValue(movePoint.x() + horizontalScrollBar()->value());
+    verticalScrollBar()->setValue(movePoint.y() + verticalScrollBar()->value());
+
+}
+
 void ClickableGraphicsView::setImage(QImage image)
 {
     imageItem = new QGraphicsPixmapItem(QPixmap::fromImage(image));
