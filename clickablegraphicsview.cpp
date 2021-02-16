@@ -132,3 +132,15 @@ void ClickableGraphicsView::cancel()
     lastPoint = roi.getLastPointCoordinates();
 }
 
+void ClickableGraphicsView::drawBoundingRect()
+{
+    if (boundingBox == nullptr) {
+        QList<QGraphicsItem*> list;
+        QGraphicsItemGroup *group = scene->createItemGroup(list);
+        boundingBox = scene->addRect(roi.getBoundingRect(group));
+    } else {
+        delete boundingBox;
+        boundingBox = nullptr;
+    }
+}
+

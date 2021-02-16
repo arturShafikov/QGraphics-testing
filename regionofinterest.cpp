@@ -104,3 +104,14 @@ void RegionOfInterest::removeLastLine()
         lineList.removeLast();
     }
 }
+
+QRectF RegionOfInterest::getBoundingRect(QGraphicsItemGroup *group)
+{
+    for (int i = 0; i < pointList.size(); i++) {
+        group->addToGroup(pointList.at(i));
+    }
+    for (int i = 0; i < lineList.size(); i++) {
+        group->addToGroup(lineList.at(i));
+    }
+    return group->boundingRect();
+}

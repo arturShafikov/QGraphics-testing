@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
             graphicsView, SLOT(clearItems()));
     connect(ui->cancelButton, SIGNAL(clicked()),
             graphicsView, SLOT(cancel()));
+    connect(ui->boundButton, SIGNAL(clicked()),
+            graphicsView, SLOT(drawBoundingRect()));
 }
 
 MainWindow::~MainWindow()

@@ -24,6 +24,7 @@ public slots:
     void closePoints();
     void clearItems();
     void cancel();
+    void drawBoundingRect();
 private:
     QGraphicsScene *scene;
     bool isFirstPoint = true;
@@ -35,6 +36,7 @@ private:
     QPointF initialDragPoint;
     RegionOfInterest roi;
     bool isClosed = false;
+    QGraphicsItem *boundingBox = nullptr;
 };
 
 #endif // CLICKABLEGRAPHICSVIEW_H
