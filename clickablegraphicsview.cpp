@@ -38,10 +38,20 @@ void ClickableGraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
     if (draggedItem) {
         QPointF currentPoint = mapToScene(event->pos());
+        qreal difX = currentPoint.rx() - initialPoint.rx();
+        qreal difY = currentPoint.ry() - initialPoint.ry();
         roi.changePointPosition(draggedItem,
-                                currentPoint.rx() - initialPoint.rx(),
-                                currentPoint.ry() - initialPoint.ry());
+                                difX,
+                                difY);
         initialPoint = currentPoint;
+        if (draggedItem == roi.getLastPoint()) {
+            lastPoint.setX(lastPoint.rx() + difX);
+            lastPoint.setY(lastPoint.ry() + difY);
+        }
+        if (draggedItem == roi.getFirstPoint()) {
+            firstPoint.setX(firstPoint.rx() + difX);
+            firstPoint.setY(firstPoint.ry() + difY);
+        }
     }
     QGraphicsView::mouseMoveEvent(event);
 }
@@ -52,9 +62,19 @@ void ClickableGraphicsView::mouseReleaseEvent(QMouseEvent *event)
     if (foundItem && draggedItem &&
             foundItem != draggedItem) {
         QPointF currentPoint = mapToScene(event->pos());
+        qreal difX = currentPoint.rx() - initialPoint.rx();
+        qreal difY = currentPoint.ry() - initialPoint.ry();
         roi.changePointPosition(draggedItem,
-                                currentPoint.rx() - initialPoint.rx(),
-                                currentPoint.ry() - initialPoint.ry());
+                                difX,
+                                difY);
+        if (draggedItem == roi.getLastPoint()) {
+            lastPoint.setX(lastPoint.rx() + difX);
+            lastPoint.setY(lastPoint.ry() + difY);
+        }
+        if (draggedItem == roi.getFirstPoint()) {
+            firstPoint.setX(firstPoint.rx() + difX);
+            firstPoint.setY(firstPoint.ry() + difY);
+        }
     }
     draggedItem = nullptr;
     initialPoint = QPointF(0,0);

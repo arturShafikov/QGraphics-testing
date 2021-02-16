@@ -15,6 +15,8 @@ public slots:
     void addLine(QGraphicsLineItem *item);
     void changePointPosition(QGraphicsItem* item, qreal x, qreal y);
     void clearItems();
+    QGraphicsItem* getFirstPoint();
+    QGraphicsItem* getLastPoint();
 private:
     QList<QGraphicsItem*> pointList;
     QList<QGraphicsLineItem*> lineList;
