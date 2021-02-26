@@ -197,18 +197,23 @@ void RegionOfInterest::deletePoint(QGraphicsItem *item)
 
 void RegionOfInterest::hide(bool needToHide)
 {
-    for (int i = 0; i < pointList.size(); i++) {
-        if (needToHide) {
-            pointList.at(i)->hide();
-        } else {
-            pointList.at(i)->show();
-        }
-    }
+    hidePoints(needToHide);
     for (int i = 0; i < lineList.size(); i++) {
         if (needToHide) {
             lineList.at(i)->hide();
         } else {
             lineList.at(i)->show();
+        }
+    }
+}
+
+void RegionOfInterest::hidePoints(bool needToHide)
+{
+    for (int i = 0; i < pointList.size(); i++) {
+        if (needToHide) {
+            pointList.at(i)->hide();
+        } else {
+            pointList.at(i)->show();
         }
     }
 }

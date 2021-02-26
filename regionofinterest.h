@@ -27,6 +27,7 @@ public slots:
     int getPointCount();
     void deletePoint(QGraphicsItem* item);
     void hide(bool needToHide);
+    void hidePoints(bool needToHide);
 private:
     QList<QGraphicsItem*> pointList;
     QList<QPointF> pointCoordinatesList;

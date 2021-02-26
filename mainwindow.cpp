@@ -22,11 +22,12 @@ MainWindow::MainWindow(QWidget *parent)
             graphicsView, SLOT(deletePoint()));
     connect(ui->createButton, SIGNAL(clicked()),
             graphicsView, SLOT(enableCreationMode()));
-    connect(ui->editButton, SIGNAL(clicked()),
-            graphicsView, SLOT(enableEditMode()));
+    connect(ui->editButton, &QPushButton::clicked,
+            graphicsView, &ClickableGraphicsView::enableEditMode);
     connect(ui->hideButton, &QPushButton::clicked,
             this, &MainWindow::hideButtonChecked);
     ui->hideButton->setCheckable(true);
+    ui->editButton->setCheckable(true);
 }
 
 MainWindow::~MainWindow()

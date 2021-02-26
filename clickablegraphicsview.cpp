@@ -17,6 +17,7 @@ void ClickableGraphicsView::mousePressEvent(QMouseEvent *e)
                    (itemAt(e->pos()) == roi.getFirstPoint())&&
                    (roi.getPointCount() > 1)) {
                closePoints();
+               roi.hidePoints(true);
                currentMode = MODE_READY;
                return;
            }
@@ -148,10 +149,14 @@ void ClickableGraphicsView::enableCreationMode()
     }
 }
 
-void ClickableGraphicsView::enableEditMode()
+void ClickableGraphicsView::enableEditMode(bool enable)
 {
-    if (currentMode == MODE_READY) {
+    if ((currentMode == MODE_READY)&&(enable)) {
         currentMode = MODE_EDIT;
+        roi.hidePoints(false);
+    } else if (!enable) {
+        currentMode = MODE_READY;
+        roi.hidePoints(true);
     }
 }
 

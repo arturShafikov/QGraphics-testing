@@ -27,7 +27,7 @@ public slots:
     void drawBoundingRect();
     void deletePoint();
     void enableCreationMode();
-    void enableEditMode();
+    void enableEditMode(bool enable);
     void hide(bool needToHide);
 private:
     QGraphicsScene *scene;
