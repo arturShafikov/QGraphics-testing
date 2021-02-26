@@ -22,6 +22,7 @@ public slots:
     void removeLastAddedElement();
     void removeLastLine();
     QRectF getBoundingRect(QGraphicsItemGroup *group);
+    int getPointCount();
 private:
     QList<QGraphicsItem*> pointList;
     QList<QPointF> pointCoordinatesList;

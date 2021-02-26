@@ -14,6 +14,12 @@ void ClickableGraphicsView::mousePressEvent(QMouseEvent *e)
     draggedItem = itemAt(e->pos());
     QPointF currentPoint = mapToScene(e->pos());
     initialDragPoint = currentPoint;
+    if ((draggedItem == roi.getFirstPoint())&&
+            (roi.getPointCount() > 1)&&
+            (!isClosed)) {
+        closePoints();
+        return;
+    }
     if (draggedItem->type() != QGraphicsEllipseItem::Type) {
         draggedItem = nullptr;
         roi.addPoint(scene->addEllipse(currentPoint.x()-pointRadius,
@@ -32,6 +38,20 @@ void ClickableGraphicsView::mousePressEvent(QMouseEvent *e)
             isFirstPoint = false;
         }
         lastPoint = currentPoint;
+    } else {
+        if (selectedPoint != nullptr) {
+            selectedPoint->setRect(
+                        selectedPoint->rect().x(),
+                        selectedPoint->rect().y(),
+                        pointRadius*2,
+                        pointRadius*2);
+        }
+        selectedPoint = dynamic_cast<QGraphicsEllipseItem*>(draggedItem);
+        selectedPoint->setRect(
+                    selectedPoint->rect().x(),
+                    selectedPoint->rect().y(),
+                    activePointRadius*2,
+                    activePointRadius*2);
     }
 }
 

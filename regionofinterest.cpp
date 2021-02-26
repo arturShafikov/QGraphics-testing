@@ -115,3 +115,8 @@ QRectF RegionOfInterest::getBoundingRect(QGraphicsItemGroup *group)
     }
     return group->boundingRect();
 }
+
+int RegionOfInterest::getPointCount()
+{
+    return pointList.size();
+}

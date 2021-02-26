@@ -31,7 +31,9 @@ private:
     QPointF lastPoint;
     QPointF firstPoint;
     QGraphicsItem *draggedItem;
-    double pointRadius = 7;
+    QGraphicsEllipseItem *selectedPoint = nullptr;
+    const double pointRadius = 7;
+    const double activePointRadius = 9;
     QGraphicsPixmapItem* imageItem;
     QPointF initialDragPoint;
     RegionOfInterest roi;
