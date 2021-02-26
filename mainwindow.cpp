@@ -12,8 +12,6 @@ MainWindow::MainWindow(QWidget *parent)
     QString filename = "sm.jpg";
     QImage image(filename);
     graphicsView->setImage(image);
-    connect(ui->closePointsButton, SIGNAL(clicked()),
-            graphicsView, SLOT(closePoints()));
     connect(ui->clearItemsButton, SIGNAL(clicked()),
             graphicsView, SLOT(clearItems()));
     connect(ui->cancelButton, SIGNAL(clicked()),
@@ -24,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
             graphicsView, SLOT(deletePoint()));
     connect(ui->createButton, SIGNAL(clicked()),
             graphicsView, SLOT(enableCreationMode()));
+    connect(ui->editButton, SIGNAL(clicked()),
+            graphicsView, SLOT(enableEditMode()));
     connect(ui->hideButton, &QPushButton::clicked,
             this, &MainWindow::hideButtonChecked);
     ui->hideButton->setCheckable(true);
@@ -36,6 +36,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::hideButtonChecked(bool checked)
 {
+    if (checked) {
+        ui->hideButton->setText("Show");
+    } else {
+        ui->hideButton->setText("Hide");
+    }
     graphicsView->hide(checked);
 }
 

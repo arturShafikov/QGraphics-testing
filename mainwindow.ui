@@ -34,13 +34,6 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QPushButton" name="closePointsButton">
-        <property name="text">
-         <string>Close Points</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="boundButton">
         <property name="text">
          <string>Bound</string>
@@ -79,6 +72,13 @@
        <widget class="QPushButton" name="hideButton">
         <property name="text">
          <string>Hide</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="editButton">
+        <property name="text">
+         <string>Edit</string>
         </property>
        </widget>
       </item>

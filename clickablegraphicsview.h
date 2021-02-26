@@ -27,6 +27,7 @@ public slots:
     void drawBoundingRect();
     void deletePoint();
     void enableCreationMode();
+    void enableEditMode();
     void hide(bool needToHide);
 private:
     QGraphicsScene *scene;
@@ -43,10 +44,12 @@ private:
     enum Modes {
         MODE_EMPTY = -1,
         MODE_CREATION = 1,
-        MODE_READY = 2
+        MODE_READY = 2,
+        MODE_EDIT = 3
     };
     int currentMode = MODE_EMPTY;
     void addPoint(QPointF point);
+    void changePointRadius(QGraphicsItem* item);
 };
 
 #endif // CLICKABLEGRAPHICSVIEW_H
