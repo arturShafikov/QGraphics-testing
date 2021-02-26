@@ -25,11 +25,10 @@ public slots:
     void clearItems();
     void cancel();
     void drawBoundingRect();
+    void deletePoint();
 private:
     QGraphicsScene *scene;
     bool isFirstPoint = true;
-    QPointF lastPoint;
-    QPointF firstPoint;
     QGraphicsItem *draggedItem;
     QGraphicsEllipseItem *selectedPoint = nullptr;
     const double pointRadius = 7;

@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
             graphicsView, SLOT(cancel()));
     connect(ui->boundButton, SIGNAL(clicked()),
             graphicsView, SLOT(drawBoundingRect()));
+    connect(ui->deletePointButton, SIGNAL(clicked()),
+            graphicsView, SLOT(deletePoint()));
 }
 
 MainWindow::~MainWindow()

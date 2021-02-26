@@ -87,6 +87,24 @@ QPointF RegionOfInterest::getLastPointCoordinates()
     }
 }
 
+QPointF RegionOfInterest::getPreLastPointCoordinates()
+{
+    if (pointCoordinatesList.size() < 2) {
+        return QPointF(0,0);
+    } else {
+        return pointCoordinatesList.at(pointCoordinatesList.size()-2);
+    }
+}
+
+QPointF RegionOfInterest::getFirstPointCoordinates()
+{
+    if (pointCoordinatesList.isEmpty()) {
+        return QPointF(0,0);
+    } else {
+        return pointCoordinatesList.front();
+    }
+}
+
 void RegionOfInterest::removeLastAddedElement()
 {
     if (!pointList.isEmpty()) {
@@ -119,4 +137,60 @@ QRectF RegionOfInterest::getBoundingRect(QGraphicsItemGroup *group)
 int RegionOfInterest::getPointCount()
 {
     return pointList.size();
+}
+
+void RegionOfInterest::deletePoint(QGraphicsItem *item)
+{
+    int pointPosition = pointList.indexOf(item);
+    if (!lineList.isEmpty()) {
+        if ((pointPosition == 0)
+                && (lineList.size() == pointList.size())) {
+            if (pointList.size() == 3) {
+                delete lineList.back();
+                lineList.last() = nullptr;
+            } else {
+                lineList.back()->setLine(
+                        lineList.back()->line().x1(),
+                        lineList.back()->line().y1(),
+                        pointCoordinatesList.at(pointPosition+1).x(),
+                        pointCoordinatesList.at(pointPosition+1).y());
+            }
+        } else if ((pointPosition == (pointList.size()-1))
+                   && (lineList.at(pointPosition-1) != nullptr)) {
+            if (pointList.size() == 3) {
+                delete lineList.at(pointPosition-1);
+                lineList[pointPosition-1] = nullptr;
+            } else {
+                lineList.at(pointPosition-1)->setLine(
+                        lineList.at(pointPosition-1)->line().x1(),
+                        lineList.at(pointPosition-1)->line().y1(),
+                        pointCoordinatesList.front().x(),
+                        pointCoordinatesList.front().y());
+            }
+        } else if ((pointPosition != 0)
+                   && (lineList.at(pointPosition-1) != nullptr)) {
+            if (pointList.size() == 3) {
+                delete lineList.at(pointPosition-1);
+                lineList[pointPosition-1] = nullptr;
+            } else {
+                lineList.at(pointPosition-1)->setLine(
+                            lineList.at(pointPosition-1)->line().x1(),
+                            lineList.at(pointPosition-1)->line().y1(),
+                            pointCoordinatesList.at(pointPosition+1).x(),
+                            pointCoordinatesList.at(pointPosition+1).y());
+            }
+        }
+        if (lineList.size() > 1) {
+            delete lineList.at(pointPosition);
+            lineList[pointPosition] = nullptr;
+        } else {
+            delete lineList.at(0);
+            lineList[0] = nullptr;
+        }
+        lineList.erase(std::remove(std::begin(lineList), std::end(lineList), nullptr),
+                     std::end(lineList));
+    }
+    delete item;
+    pointList.removeAt(pointPosition);
+    pointCoordinatesList.removeAt(pointPosition);
 }

@@ -19,10 +19,13 @@ public slots:
     QGraphicsItem* getFirstPoint();
     QGraphicsItem* getLastPoint();
     QPointF getLastPointCoordinates();
+    QPointF getPreLastPointCoordinates();
+    QPointF getFirstPointCoordinates();
     void removeLastAddedElement();
     void removeLastLine();
     QRectF getBoundingRect(QGraphicsItemGroup *group);
     int getPointCount();
+    void deletePoint(QGraphicsItem* item);
 private:
     QList<QGraphicsItem*> pointList;
     QList<QPointF> pointCoordinatesList;

@@ -14,9 +14,9 @@ void ClickableGraphicsView::mousePressEvent(QMouseEvent *e)
     draggedItem = itemAt(e->pos());
     QPointF currentPoint = mapToScene(e->pos());
     initialDragPoint = currentPoint;
-    if ((draggedItem == roi.getFirstPoint())&&
-            (roi.getPointCount() > 1)&&
-            (!isClosed)) {
+    if ((!isClosed)&&
+            (draggedItem == roi.getFirstPoint())&&
+            (roi.getPointCount() > 1)) {
         closePoints();
         return;
     }
@@ -28,16 +28,15 @@ void ClickableGraphicsView::mousePressEvent(QMouseEvent *e)
                        QPen(), QBrush(Qt::SolidPattern)),
                      currentPoint.x(), currentPoint.y());
         if (!isFirstPoint) {
-            QLineF line(lastPoint.x(), lastPoint.y(),
+            QLineF line(roi.getPreLastPointCoordinates().x(),
+                        roi.getPreLastPointCoordinates().y(),
                         currentPoint.x(), currentPoint.y());
 
             roi.addLine(scene->addLine(line));
         }
         if (isFirstPoint) {
-            firstPoint = currentPoint;
             isFirstPoint = false;
         }
-        lastPoint = currentPoint;
     } else {
         if (selectedPoint != nullptr) {
             selectedPoint->setRect(
@@ -65,14 +64,6 @@ void ClickableGraphicsView::mouseMoveEvent(QMouseEvent *event)
                                 difX,
                                 difY);
         initialDragPoint = currentPoint;
-        if (draggedItem == roi.getLastPoint()) {
-            lastPoint.setX(lastPoint.rx() + difX);
-            lastPoint.setY(lastPoint.ry() + difY);
-        }
-        if (draggedItem == roi.getFirstPoint()) {
-            firstPoint.setX(firstPoint.rx() + difX);
-            firstPoint.setY(firstPoint.ry() + difY);
-        }
     }
     QGraphicsView::mouseMoveEvent(event);
 }
@@ -88,16 +79,7 @@ void ClickableGraphicsView::mouseReleaseEvent(QMouseEvent *event)
         roi.changePointPosition(draggedItem,
                                 difX,
                                 difY);
-        if (draggedItem == roi.getLastPoint()) {
-            lastPoint.setX(lastPoint.rx() + difX);
-            lastPoint.setY(lastPoint.ry() + difY);
-        }
-        if (draggedItem == roi.getFirstPoint()) {
-            firstPoint.setX(firstPoint.rx() + difX);
-            firstPoint.setY(firstPoint.ry() + difY);
-        }
     }
-    draggedItem = nullptr;
     initialDragPoint = QPointF(0,0);
     QGraphicsView::mouseReleaseEvent(event);
 }
@@ -125,8 +107,8 @@ void ClickableGraphicsView::setImage(QImage image)
 
 void ClickableGraphicsView::closePoints()
 {
-    QLineF line(lastPoint.x(), lastPoint.y(),
-                firstPoint.x(), firstPoint.y());
+    QLineF line(roi.getLastPointCoordinates().x(), roi.getLastPointCoordinates().y(),
+                roi.getFirstPointCoordinates().x(), roi.getFirstPointCoordinates().y());
     roi.addLine(scene->addLine(line));
     isClosed = true;
 }
@@ -149,7 +131,6 @@ void ClickableGraphicsView::cancel()
     if (roi.getFirstPoint() == nullptr) {
         isFirstPoint = true;
     }
-    lastPoint = roi.getLastPointCoordinates();
 }
 
 void ClickableGraphicsView::drawBoundingRect()
@@ -162,5 +143,12 @@ void ClickableGraphicsView::drawBoundingRect()
         delete boundingBox;
         boundingBox = nullptr;
     }
+}
+
+void ClickableGraphicsView::deletePoint()
+{
+    roi.deletePoint(draggedItem);
+    draggedItem = nullptr;
+    selectedPoint = nullptr;
 }
 
