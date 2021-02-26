@@ -16,6 +16,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void hideButtonChecked(bool checked);
+
 private:
     Ui::MainWindow *ui;
     ClickableGraphicsView *graphicsView;

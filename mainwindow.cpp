@@ -22,10 +22,20 @@ MainWindow::MainWindow(QWidget *parent)
             graphicsView, SLOT(drawBoundingRect()));
     connect(ui->deletePointButton, SIGNAL(clicked()),
             graphicsView, SLOT(deletePoint()));
+    connect(ui->createButton, SIGNAL(clicked()),
+            graphicsView, SLOT(enableCreationMode()));
+    connect(ui->hideButton, &QPushButton::clicked,
+            this, &MainWindow::hideButtonChecked);
+    ui->hideButton->setCheckable(true);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::hideButtonChecked(bool checked)
+{
+    graphicsView->hide(checked);
 }
 

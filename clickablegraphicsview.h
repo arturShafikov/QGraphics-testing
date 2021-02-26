@@ -26,6 +26,8 @@ public slots:
     void cancel();
     void drawBoundingRect();
     void deletePoint();
+    void enableCreationMode();
+    void hide(bool needToHide);
 private:
     QGraphicsScene *scene;
     bool isFirstPoint = true;
@@ -38,6 +40,13 @@ private:
     RegionOfInterest roi;
     bool isClosed = false;
     QGraphicsItem *boundingBox = nullptr;
+    enum Modes {
+        MODE_EMPTY = -1,
+        MODE_CREATION = 1,
+        MODE_READY = 2
+    };
+    int currentMode = MODE_EMPTY;
+    void addPoint(QPointF point);
 };
 
 #endif // CLICKABLEGRAPHICSVIEW_H

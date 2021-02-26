@@ -194,3 +194,21 @@ void RegionOfInterest::deletePoint(QGraphicsItem *item)
     pointList.removeAt(pointPosition);
     pointCoordinatesList.removeAt(pointPosition);
 }
+
+void RegionOfInterest::hide(bool needToHide)
+{
+    for (int i = 0; i < pointList.size(); i++) {
+        if (needToHide) {
+            pointList.at(i)->hide();
+        } else {
+            pointList.at(i)->show();
+        }
+    }
+    for (int i = 0; i < lineList.size(); i++) {
+        if (needToHide) {
+            lineList.at(i)->hide();
+        } else {
+            lineList.at(i)->show();
+        }
+    }
+}

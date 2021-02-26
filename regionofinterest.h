@@ -26,6 +26,7 @@ public slots:
     QRectF getBoundingRect(QGraphicsItemGroup *group);
     int getPointCount();
     void deletePoint(QGraphicsItem* item);
+    void hide(bool needToHide);
 private:
     QList<QGraphicsItem*> pointList;
     QList<QPointF> pointCoordinatesList;
